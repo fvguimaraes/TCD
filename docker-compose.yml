@@ -29,7 +29,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       KafkaServer: "kafka:29092"
-      KafkaTopic: "aoj69"
+      KafkaTopic: "69aoj"
       SlackBaseUrl: "https://hooks.slack.com"
       SlackServiceUrl: "/services/TNXJWU7L0/BQAATG132/Vxw33doNqBHUT9UfS5KcWiBd"
     command: dockerize -wait tcp://kafka:9092
