@@ -1,0 +1,12 @@
+zuul:
+  routes:
+    usuarios:
+      path: /usuarios/**
+      url: http://localhost:8181
+    chamados:
+      path: /chamados/**
+      url: http://localhost:8080
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false

@@ -12,13 +12,13 @@ public class Chamado {
 	@ApiModelProperty(notes = "Detalhe do problema relatado")
 	private String comentario;
 	
-	@ApiModelProperty(notes = "Data de criação do chamado")
+	@ApiModelProperty(notes = "Data de criação do chamado", hidden = true)
 	private LocalDate dataCriacao;
 	
-	@ApiModelProperty(notes = "Status atual do chamado")
+	@ApiModelProperty(notes = "Status atual do chamado", hidden = true)
 	private String status;
 	
-	@ApiModelProperty(notes = "ID do chamado", required = true)
+	@ApiModelProperty(notes = "ID do chamado", required = true, hidden = true)
 	private long idChamado;
 	
 	public static class BuildChamado {
