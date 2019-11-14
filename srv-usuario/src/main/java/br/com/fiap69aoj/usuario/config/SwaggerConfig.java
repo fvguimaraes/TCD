@@ -24,7 +24,7 @@ public class SwaggerConfig {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
 				.apis(apis())
-				.paths(PathSelectors.any())
+				.paths(PathSelectors.any())				
 				.build()
 				.apiInfo(apiInfo());
 	}
@@ -32,18 +32,15 @@ public class SwaggerConfig {
 	private Predicate<RequestHandler> apis() {
 		return RequestHandlerSelectors.basePackage("br.com.fiap69aoj.usuario.controller");
 	}
-	
-    private ApiInfo apiInfo() {
-   	 
-        ApiInfo apiInfo = new ApiInfoBuilder()
-                .title ("API de controle de usuários")
-                .description ("Essa é a API de controle de usuários do sistema de chamados.")
-                .license("Apache License Version 2.0")
-                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
-                .version("1.0.0")
-                .contact(new Contact("Fiap 69AOJ","www.fiap69aoj.com.br", "69aoj@fiap.com.br"))
-                .build();
- 
-        return apiInfo;
-    }
+
+	private ApiInfo apiInfo() {
+
+		ApiInfo apiInfo = new ApiInfoBuilder().title("API de controle de usuários")
+				.description("Essa é a API de controle de usuários do sistema de chamados.")
+				.license("Apache License Version 2.0").licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
+				.version("1.0.0").contact(new Contact("Fiap 69AOJ", "www.fiap69aoj.com.br", "69aoj@fiap.com.br"))
+				.build();
+
+		return apiInfo;
+	}
 }

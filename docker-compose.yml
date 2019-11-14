@@ -65,6 +65,7 @@ services:
       dockerfile: ./Docker/Dockerfile
     ports:
       - "8080:8080"
+    restart: on-failure
     depends_on:
       - kafka
       - mysqlsrv_chamados
@@ -77,9 +78,22 @@ services:
       dockerfile: ./Docker/Dockerfile
     ports:
       - "8181:8181"
+    restart: on-failure
     depends_on:
       - kafka
       - mysqlsrv_usuarios
+    networks: 
+      - webhook.slack-network
+  
+  gateway:
+    build: 
+      context: ./gateway/
+      dockerfile: ./Docker/Dockerfile
+    ports:
+      - "8282:8282"
+    depends_on:
+      - chamados
+      - usuarios
     networks: 
       - webhook.slack-network
 
