@@ -91,8 +91,9 @@ public class CatalogoService {
 			ratting.setNota(nota);
 			ratting.setTipoConteudo("FILME");
 			producer.send(ratting.toJson());
+		} else {
+			throw new FilmeNaoEncontradoException("");
 		}
-		throw new FilmeNaoEncontradoException("");
 	}
 
 	public void registraDetlheSerie(Long idSerie, Long nota) {
@@ -104,8 +105,9 @@ public class CatalogoService {
 			ratting.setNota(nota);
 			ratting.setTipoConteudo("SERIE");
 			producer.send(ratting.toJson());
+		} else {
+			throw new SerieNaoEncontradaException("");
 		}
-		throw new SerieNaoEncontradaException("");
 	}
 
 	private Filme buildFilmeModelFromEntity(FilmeEntity filmeEntity) {

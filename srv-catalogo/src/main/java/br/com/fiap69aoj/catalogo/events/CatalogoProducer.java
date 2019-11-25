@@ -22,5 +22,4 @@ public class CatalogoProducer {
         final String mensageKey = UUID.randomUUID().toString();
         kafkaTemplate.send(rattingTopic, mensageKey, mensagem);        
     }
-
 }

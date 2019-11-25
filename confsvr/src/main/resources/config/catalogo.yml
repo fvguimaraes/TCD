@@ -13,7 +13,7 @@ server.port: "8383"
 server.servlet.context-path: "/catalogos"
 
 spring.kafka.producer.bootstrap-servers: "kafka:29092"
-chamado.topic: "69aoj"
+ratting.topic: "69aoj"
 
 spring.kafka.producer.value-serializer: "org.springframework.kafka.support.serializer.JsonSerializer"
 spring.kafka.producer.key-serializer: "org.apache.kafka.common.serialization.StringSerializer"
