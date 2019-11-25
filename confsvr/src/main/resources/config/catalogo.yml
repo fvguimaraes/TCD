@@ -9,6 +9,11 @@ spring.jpa.hibernate.ddl-auto : "update"
 spring.jpa.hibernate.naming-strategy : "org.hibernate.cfg.DefaultComponentSafeNamingStrategy"
 spring.jpa.properties.hibernate.dialect : "org.hibernate.dialect.MySQL5Dialect"
 
-
 server.port: "8383"
 server.servlet.context-path: "/catalogos"
+
+spring.kafka.producer.bootstrap-servers: "kafka:29092"
+chamado.topic: "69aoj"
+
+spring.kafka.producer.value-serializer: "org.springframework.kafka.support.serializer.JsonSerializer"
+spring.kafka.producer.key-serializer: "org.apache.kafka.common.serialization.StringSerializer"

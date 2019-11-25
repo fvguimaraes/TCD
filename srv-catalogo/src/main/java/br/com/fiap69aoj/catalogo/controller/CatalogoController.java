@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +30,7 @@ public class CatalogoController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Cadastrar um filme", notes = "Cadastrar um filme")
-	@PutMapping("/filmes/")
+	@PostMapping("/filmes/")
 	public ResponseEntity<HttpStatus> inserirFilme(@RequestBody Filme filme) {
 		catalogoService.inserirFilme(filme);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -38,31 +38,31 @@ public class CatalogoController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Cadastrar uma série", notes = "Cadastrar uma série")
-	@PutMapping("/series/")
+	@PostMapping("/series/")
 	public ResponseEntity<HttpStatus> inserirSerie(@RequestBody Serie serie) {
 		catalogoService.inserirSerie(serie);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
-	@ApiOperation(value = "Obtem filme por determindo genero", notes = "Obter filme por determinado genero", response = Filme.class)
+	@ApiOperation(value = "Obtem filmes por determindo genero", notes = "Obter filmes por determinado genero", response = String.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Filmes listados com sucesso"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
 		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 		    @ApiResponse(code = 404, message = "Nenhum filme encontrado") })
-	@GetMapping("/filmes/")
-	public ResponseEntity<List<Filme>> listarFilmesPorGenero(@RequestParam String genero) {
+	@GetMapping("/filmes/{genero}")
+	public ResponseEntity<List<String>> listarFilmesPorGenero(@PathVariable String genero) {
 		return ResponseEntity.ok(catalogoService.obterFilmePorGenero(genero));
 	}
 	
-	@ApiOperation(value = "Obtem serie por determindo genero", notes = "Obter serie por determinado genero", response = Serie.class)
+	@ApiOperation(value = "Obtem serie por determindo genero", notes = "Obter serie por determinado genero", response = String.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Series listadas com sucesso"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
 		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 		    @ApiResponse(code = 404, message = "Nenhuma serie encontrado") })
-	@GetMapping("/series/")
-	public ResponseEntity<List<Serie>> listarSeriesPorGenero(@RequestParam String genero) {
+	@GetMapping("/series/{genero}")
+	public ResponseEntity<List<String>> listarSeriesPorGenero(@PathVariable String genero) {
 		return ResponseEntity.ok(catalogoService.obterSeriePorGenero(genero));
 	}
 	
@@ -72,9 +72,9 @@ public class CatalogoController {
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
 		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 		    @ApiResponse(code = 404, message = "Nenhum filme encontrado") })
-	@GetMapping("/filmes/{nomeFilme}/detalhes")
-	public ResponseEntity<Filme> obterDetalheFilme(@PathVariable String nomeFilme) {
-		return ResponseEntity.ok(catalogoService.obterDetalheFilme(nomeFilme));
+	@GetMapping("/filmes/{idFilme}/detalhes")
+	public ResponseEntity<Filme> obterDetalheFilme(@PathVariable long idFilme) {
+		return ResponseEntity.ok(catalogoService.obterDetalheFilme(idFilme));
 	}
 	
 	@ApiOperation(value = "Obtem detalhe de uma serie", notes = "Obtem detalhe de uma serie", response = Serie.class)
@@ -83,9 +83,32 @@ public class CatalogoController {
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
 		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 		    @ApiResponse(code = 404, message = "Nenhuma serie encontrada") })
-	@GetMapping("/series/{nomeSerie}/detalhes")
-	public ResponseEntity<Serie> obterDetalheSerie(@PathVariable String nomeSerie) {
-		return ResponseEntity.ok(catalogoService.obterDetalheSerie(nomeSerie));
+	@GetMapping("/series/{idSerie}/detalhes")
+	public ResponseEntity<Serie> obterDetalheSerie(@PathVariable long idSerie) {
+		return ResponseEntity.ok(catalogoService.obterDetalheSerie(idSerie));
 	}
 
+	@ApiOperation(value = "Adiciona nota e flag de assistido", notes = "Adiciona nota e flag de assistido")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Classificação feita com sucesso"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+		    @ApiResponse(code = 404, message = "Nenhum filme encontrado") })
+	@PutMapping("/filmes/{idFilme}/detalhes")
+	public ResponseEntity<HttpStatus> inserirDetalhesFilme(@PathVariable Long idFilme, @RequestBody long nota) {
+		catalogoService.registraDetlheFilme(idFilme, nota);
+		return ResponseEntity.ok(HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "Adiciona nota e flag de assistido", notes = "Adiciona nota e flag de assistido")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Classificação feita com sucesso"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+		    @ApiResponse(code = 404, message = "Nenhum filme encontrado") })
+	@PutMapping("/serie/{idSerie}/detalhes")
+	public ResponseEntity<HttpStatus> inserirDetalhesSerie(@PathVariable Long idSerie, @RequestBody long nota) {
+		catalogoService.registraDetlheSerie(idSerie, nota);
+		return ResponseEntity.ok(HttpStatus.OK);
+	}
 }
