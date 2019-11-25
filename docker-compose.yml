@@ -75,12 +75,13 @@ services:
       dockerfile: ./Docker/Dockerfile
     ports:
       - "8282:8282"
+    restart: on-failure
     depends_on:
       - chamados
       - usuarios
       - catalogos
     networks: 
-      - netflix.case-network
+    - netflix.case-network
   
   configserver:
     build: 
