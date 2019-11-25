@@ -56,6 +56,16 @@ services:
     networks: 
       - netflix.case-network
 
+  mysqlsrv_estatisticas:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "estatistica"
+    ports:
+      - "3385:3306"
+    networks: 
+      - netflix.case-network
+
   chamados:
     build: 
       context: ./srv-chamados/
@@ -125,6 +135,11 @@ services:
       dockerfile: ./Docker/Dockerfile
     ports:
       - "8484:8484"
+    restart: on-failure
+    depends_on:
+      - mysqlsrv_estatisticas
+      - kafka
+      - configserver      
     networks: 
       - netflix.case-network
 

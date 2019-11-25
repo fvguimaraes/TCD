@@ -1,8 +1,6 @@
-package br.com.fiap69aoj.catalogo.model;
+package br.com.fiap69aoj.estatisticas.model;
 
-import com.google.gson.Gson;
-
-public class SerieRatting {
+public class ConteudoRatting {
 
 	private Long idConteudo;
 
@@ -12,7 +10,7 @@ public class SerieRatting {
 
 	private Long nota;
 	
-	private Long idUsuario;
+	private long idUsuario;
 
 	public Long getIdConteudo() {
 		return idConteudo;
@@ -45,16 +43,12 @@ public class SerieRatting {
 	public void setNota(Long nota) {
 		this.nota = nota;
 	}
-	
-	public String toJson() {
-		return new Gson().toJson(this);		
-	}
 
-	public Long getIdUsuario() {
+	public long getIdUsuario() {
 		return idUsuario;
 	}
 
-	public void setIdUsuario(Long idUsuario) {
+	public void setIdUsuario(long idUsuario) {
 		this.idUsuario = idUsuario;
 	}
 	

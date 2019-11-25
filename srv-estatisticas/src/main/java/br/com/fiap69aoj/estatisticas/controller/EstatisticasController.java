@@ -24,9 +24,9 @@ public class EstatisticasController {
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Itens assitidos.")
 	})
-	@GetMapping("/assistidos/filmes/{genero}")
-	public ResponseEntity<List<Conteudo>> getAssistidos(@PathVariable String catalogo, @PathVariable String genero, @RequestParam String order){
-		return ResponseEntity.ok(this.service.assistidos(catalogo, genero, order));
+	@GetMapping("/assistidos/{tipo}/{genero}")
+	public ResponseEntity<List<Conteudo>> getAssistidos(@PathVariable String tipo, @PathVariable String genero){
+		return ResponseEntity.ok(this.service.assistidos(tipo, genero));
 	}
 
 	@ResponseStatus(HttpStatus.ACCEPTED)
@@ -34,8 +34,8 @@ public class EstatisticasController {
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Estatisiticas dos itens.")
 	})
-	@GetMapping("/classificacoes/{catalogo}/{genero}")
-	public ResponseEntity getClassificacoes(@PathVariable String catalogo, @PathVariable String genero, @RequestParam String order, @RequestParam String usuario){
-		return ResponseEntity.ok(this.service.classificacoesPorUsuario(catalogo,genero,order,usuario));
+	@GetMapping("/assistidos/{idUsuario}")
+	public ResponseEntity<List<Conteudo>> getClassificacoes(@RequestParam long idUsuario){
+		return ResponseEntity.ok(this.service.obterItensAssistidosDoUsuario(idUsuario));
 	}
 }

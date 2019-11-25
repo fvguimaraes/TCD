@@ -1,4 +1,4 @@
-spring.datasource.url: "jdbc:mysql://mysqlsrv_estatistica:3306/estatistica?useTimezone=true&serverTimezone=America/Sao_Paulo"
+spring.datasource.url: "jdbc:mysql://mysqlsrv_estatisticas:3306/estatistica?useTimezone=true&serverTimezone=America/Sao_Paulo"
 spring.datasource.username: "root"
 spring.datasource.password: "root"
 
@@ -12,3 +12,9 @@ spring.jpa.properties.hibernate.dialect : "org.hibernate.dialect.MySQL5Dialect"
 
 server.port: "8484"
 server.servlet.context-path: "/estatisticas"
+
+spring.kafka.consumer.bootstrap-servers: "kafka:29092"
+spring.kafka.consumer.group-id: "group-id"
+spring.kafka.consumer.auto-offset-reset: "earliest"
+ 
+ratting.topic: "69aoj"

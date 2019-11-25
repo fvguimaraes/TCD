@@ -2,6 +2,7 @@ package br.com.fiap69aoj.catalogo.controller;
 
 import java.util.List;
 
+import br.com.fiap69aoj.catalogo.model.Conteudo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,20 +99,42 @@ public class CatalogoController {
 		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 		    @ApiResponse(code = 404, message = "Nenhum filme encontrado") })
 	@PutMapping("/filmes/{idFilme}/detalhes")
-	public ResponseEntity<HttpStatus> inserirDetalhesFilme(@PathVariable Long idFilme, @RequestBody long nota) {
-		catalogoService.registraDetlheFilme(idFilme, nota);
+	public ResponseEntity<HttpStatus> inserirDetalhesFilme(@PathVariable Long idFilme, @RequestBody long nota, @RequestBody long idUsuario) {
+		catalogoService.registraDetlheFilme(idFilme, nota, idUsuario);
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "Adiciona nota e flag de assistido", notes = "Adiciona nota e flag de assistido")
-	@ApiResponses(value = { 
+	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Classificação feita com sucesso"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
 		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 		    @ApiResponse(code = 404, message = "Nenhum filme encontrado") })
 	@PutMapping("/serie/{idSerie}/detalhes")
-	public ResponseEntity<HttpStatus> inserirDetalhesSerie(@PathVariable Long idSerie, @RequestBody long nota) {
-		catalogoService.registraDetlheSerie(idSerie, nota);
+	public ResponseEntity<HttpStatus> inserirDetalhesSerie(@PathVariable Long idSerie, @RequestBody long nota, @RequestBody long idUsuario) {
+		catalogoService.registraDetlheSerie(idSerie, nota, idUsuario);
 		return ResponseEntity.ok(HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "Obtem conteudo mais assitido por genero", notes = "Obtem conteudo mais assitido por genero", response = Conteudo.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "conteudo encontrado"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code = 404, message = "Nenhuma serie encontrada") })
+	@GetMapping("GET /assistidos/{tipo}/{genero}}")
+	public ResponseEntity<List<Conteudo>> obterAssistidosGenero(@PathVariable String tipo, @PathVariable String genero) {
+		return ResponseEntity.ok(catalogoService.obterAssistidosGenero(tipo, genero));
+	}
+
+	@ApiOperation(value = "Obtem conteudo mais assitido por genero", notes = "Obtem conteudo mais assitido por genero", response = Conteudo.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "conteudo encontrado"),
+			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+			@ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+			@ApiResponse(code = 404, message = "Nenhuma serie encontrada") })
+	@GetMapping("GET /assistidos/{id_usuario}")
+	public ResponseEntity<List<Conteudo>> obterAssistidosUsuario(@PathVariable Long id_usuario) {
+		return ResponseEntity.ok(catalogoService.obterAssistidosGenero(id_usuario));
 	}
 }

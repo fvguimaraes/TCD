@@ -12,6 +12,8 @@ public class FilmeRatting{
 
 	private Long nota;
 
+	private long idUsuario;
+	
 	public Long getIdConteudo() {
 		return idConteudo;
 	}
@@ -47,5 +49,15 @@ public class FilmeRatting{
 	public String toJson() {
 		return new Gson().toJson(this);		
 	}
+
+	public long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(long idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+	
+	
 
 }

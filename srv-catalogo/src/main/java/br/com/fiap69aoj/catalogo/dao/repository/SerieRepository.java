@@ -18,6 +18,6 @@ public interface SerieRepository extends JpaRepository<SerieEntity, Long> {
 	
 	List<SerieEntity> findByNomeContainingIgnoreCase(String nome);
 	
-	@Query("SELECT s FROM SerieEntity s where s.nome LIKE %?1% and f.genero = ?2")
+	@Query("SELECT s FROM SerieEntity s where s.nome LIKE %?1% and s.genero = ?2")
 	List<SerieEntity> findCustom(String chave, String genero);
 }

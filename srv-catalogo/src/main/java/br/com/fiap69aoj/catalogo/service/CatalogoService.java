@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import br.com.fiap69aoj.catalogo.client.EstatisticasClient;
+import br.com.fiap69aoj.catalogo.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,6 @@ import br.com.fiap69aoj.catalogo.dao.repository.SerieRepository;
 import br.com.fiap69aoj.catalogo.events.CatalogoProducer;
 import br.com.fiap69aoj.catalogo.exception.FilmeNaoEncontradoException;
 import br.com.fiap69aoj.catalogo.exception.SerieNaoEncontradaException;
-import br.com.fiap69aoj.catalogo.model.Filme;
-import br.com.fiap69aoj.catalogo.model.FilmeRatting;
-import br.com.fiap69aoj.catalogo.model.Serie;
-import br.com.fiap69aoj.catalogo.model.SerieRatting;
 
 @Service
 @Transactional
@@ -34,6 +32,8 @@ public class CatalogoService {
 
 	@Autowired
 	private CatalogoProducer producer;
+	@Autowired
+	private EstatisticasClient estatisticas;
 
 	public void inserirFilme(Filme filme) {
 		filmeRepo.save(this.builFilmeEntityFromModel(filme));
@@ -113,7 +113,7 @@ public class CatalogoService {
 		throw new SerieNaoEncontradaException("");
 	}
 
-	public void registraDetlheFilme(Long idFilme, Long nota) {
+	public void registraDetlheFilme(Long idFilme, Long nota, Long idUsuario) {
 		Optional<FilmeEntity> filmeEntity = filmeRepo.findById(idFilme);
 		if (filmeEntity.isPresent()) {
 			FilmeRatting ratting = new FilmeRatting();
@@ -121,13 +121,14 @@ public class CatalogoService {
 			ratting.setIdConteudo(filmeEntity.get().getId());
 			ratting.setNota(nota);
 			ratting.setTipoConteudo("FILME");
+			ratting.setIdUsuario(idUsuario);
 			producer.send(ratting.toJson());
 		} else {
 			throw new FilmeNaoEncontradoException("");
 		}
 	}
 
-	public void registraDetlheSerie(Long idSerie, Long nota) {
+	public void registraDetlheSerie(Long idSerie, Long nota, Long idUsuario) {
 		Optional<SerieEntity> serieEntity = serieRepo.findById(idSerie);
 		if (serieEntity.isPresent()) {
 			SerieRatting ratting = new SerieRatting();
@@ -135,6 +136,7 @@ public class CatalogoService {
 			ratting.setIdConteudo(serieEntity.get().getId());
 			ratting.setNota(nota);
 			ratting.setTipoConteudo("SERIE");
+			ratting.setIdUsuario(idUsuario);
 			producer.send(ratting.toJson());
 		} else {
 			throw new SerieNaoEncontradaException("");
@@ -169,4 +171,11 @@ public class CatalogoService {
 		return entity;
 	}
 
+	public List<Conteudo> obterAssistidosGenero(String tipo, String genero) {
+		return this.estatisticas.assistidos(tipo,genero);
+	}
+
+	public List<Conteudo> obterAssistidosGenero(Long id_usuario) {
+		return this.estatisticas.assistidosUsuario(id_usuario);
+	}
 }
