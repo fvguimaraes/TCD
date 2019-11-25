@@ -24,7 +24,7 @@ public class EstatisticasController {
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "Itens assitidos.")
 	})
-	@GetMapping("/assistidos/{catalogo}/{genero}")
+	@GetMapping("/assistidos/filmes/{genero}")
 	public ResponseEntity<List<Conteudo>> getAssistidos(@PathVariable String catalogo, @PathVariable String genero, @RequestParam String order){
 		return ResponseEntity.ok(this.service.assistidos(catalogo, genero, order));
 	}

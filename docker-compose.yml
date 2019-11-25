@@ -92,10 +92,11 @@ services:
       - "8383:8383"
     restart: on-failure
     depends_on:
+      - mysqlsrv_catalogos
       - gateway
       - kafka
       - configserver
-      - mysqlsrv_catalogos
+      - estatistica      
     networks: 
       - netflix.case-network
   
@@ -115,6 +116,15 @@ services:
       dockerfile: ./Docker/Dockerfile
     ports:
       - "8888:8888"
+    networks: 
+      - netflix.case-network
+
+  estatistica:
+    build: 
+      context: ./srv-estatisticas/
+      dockerfile: ./Docker/Dockerfile
+    ports:
+      - "8484:8484"
     networks: 
       - netflix.case-network
 
