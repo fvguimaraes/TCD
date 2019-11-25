@@ -1,44 +1,5 @@
 version: '3'
 services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    networks: 
-      - webhook.slack-network
-
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    depends_on:
-      - zookeeper
-    ports:
-      - 9092:9092
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_HEAP_OPTS: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2
-    networks: 
-      - webhook.slack-network
-
-  consumer:
-    image: furstlevy/fiap_webhook_slack_worker:latest
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      KafkaServer: "kafka:29092"
-      KafkaTopic: "69aoj"
-      SlackBaseUrl: "https://hooks.slack.com"
-      SlackServiceUrl: "/services/TNXJWU7L0/BQAATG132/Vxw33doNqBHUT9UfS5KcWiBd"
-    command: dockerize -wait tcp://kafka:9092
-    depends_on:
-      - kafka
-    networks: 
-      - webhook.slack-network
-
   mysqlsrv_chamados:
     image: mysql:5.7
     environment:
@@ -47,7 +8,7 @@ services:
     ports:
       - "3397:3306"
     networks: 
-      - webhook.slack-network
+      - netflix.case-network
 
   mysqlsrv_usuarios:
     image: mysql:5.7
@@ -57,7 +18,17 @@ services:
     ports:
       - "3398:3306"
     networks: 
-      - webhook.slack-network
+      - netflix.case-network
+
+  mysqlsrv_catalogos:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "catalogos"
+    ports:
+      - "3386:3306"
+    networks: 
+      - netflix.case-network
 
   chamados:
     build: 
@@ -67,10 +38,10 @@ services:
       - "8080:8080"
     restart: on-failure
     depends_on:
-      - kafka
+      - configserver
       - mysqlsrv_chamados
     networks: 
-      - webhook.slack-network
+      - netflix.case-network
     
   usuarios:
     build: 
@@ -80,10 +51,23 @@ services:
       - "8181:8181"
     restart: on-failure
     depends_on:
-      - kafka
+      - configserver
       - mysqlsrv_usuarios
     networks: 
-      - webhook.slack-network
+      - netflix.case-network
+
+  catalogos:
+    build: 
+      context: ./srv-catalogo/
+      dockerfile: ./Docker/Dockerfile
+    ports:
+      - "8383:8383"
+    restart: on-failure
+    depends_on:
+      - configserver
+      - mysqlsrv_catalogos
+    networks: 
+      - netflix.case-network
   
   gateway:
     build: 
@@ -94,9 +78,19 @@ services:
     depends_on:
       - chamados
       - usuarios
+      - catalogos
     networks: 
-      - webhook.slack-network
+      - netflix.case-network
+  
+  configserver:
+    build: 
+      context: ./confsvr/
+      dockerfile: ./Docker/Dockerfile
+    ports:
+      - "8888:8888"
+    networks: 
+      - netflix.case-network
 
 networks: 
-  webhook.slack-network:
+  netflix.case-network:
     driver: bridge

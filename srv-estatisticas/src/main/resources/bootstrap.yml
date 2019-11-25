@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: estatistica
+  profiles:
+    active:
+      default
+  cloud:
+    config:
+      uri: http://configserver:8888

@@ -6,6 +6,9 @@ zuul:
     chamados:
       path: /chamados/**
       url: http://chamados:8080/chamados
+    catalogos:
+      path: /catalogos/**
+      url: http://catalogos:8383/catalogos
 eureka:
   client:
     registerWithEureka: false
@@ -13,6 +16,6 @@ eureka:
 
 logging:
    level:
-      br: debug 
- 
-    
+      br: debug
+server:
+  port: 8282

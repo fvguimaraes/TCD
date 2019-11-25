@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: catalogo
+  profiles:
+    active:
+      default
+  cloud:
+    config:
+      uri: http://configserver:8888
