@@ -16,6 +16,8 @@ public class EstatisticaEntity {
 	private Long id;
 	
 	@NotNull
+	private Long idUsuario;
+	@NotNull
 	private Long idConteudo;
 	@NotNull
 	private String tipoConteudo;

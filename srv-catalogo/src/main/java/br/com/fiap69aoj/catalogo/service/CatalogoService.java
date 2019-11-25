@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +43,23 @@ public class CatalogoService {
 		serieRepo.save(this.buildSerieEntityFromModel(serie));
 	}
 
-	public List<String> obterFilmePorGenero(String genero) {
-		List<FilmeEntity> filmesEntity = filmeRepo.findAllByGenero(genero);
+	public List<String> obterFilmePorGeneroOuChave(String genero, String palavraChave) {
+		
+		boolean buscarPorPalavraChave = StringUtils.isNotEmpty(palavraChave);
+		boolean buscarPorGenero = StringUtils.isNotEmpty(genero);
+		
+		List<FilmeEntity> filmesEntity = null;
+		
+		if (buscarPorGenero && buscarPorPalavraChave) {
+			filmesEntity = filmeRepo.findCustom(palavraChave, genero);
+		} else if (buscarPorGenero) {
+			filmesEntity = filmeRepo.findAllByGenero(genero);
+		} else if (buscarPorPalavraChave) {
+			filmesEntity = filmeRepo.findByNomeContainingIgnoreCase(palavraChave);
+		} else {
+			filmesEntity = filmeRepo.findAll();
+		}
+						
 		if (!filmesEntity.isEmpty()) {
 			List<String> retorno = new ArrayList<String>();
 			for (FilmeEntity filme : filmesEntity) {
@@ -54,8 +70,23 @@ public class CatalogoService {
 		throw new FilmeNaoEncontradoException(genero);
 	}
 
-	public List<String> obterSeriePorGenero(String genero) {
-		List<SerieEntity> seriesEntity = serieRepo.findAllByGenero(genero);
+	public List<String> obterSeriePorGeneroOuChave(String genero, String palavraChave) {
+		
+		boolean buscarPorPalavraChave = StringUtils.isNotEmpty(palavraChave);
+		boolean buscarPorGenero = StringUtils.isNotEmpty(genero);
+		
+		List<SerieEntity> seriesEntity = null;
+		
+		if (buscarPorGenero && buscarPorPalavraChave) {
+			seriesEntity = serieRepo.findCustom(palavraChave, genero);
+		} else if (buscarPorGenero) {
+			seriesEntity = serieRepo.findAllByGenero(genero);
+		} else if (buscarPorPalavraChave) {
+			seriesEntity = serieRepo.findByNomeContainingIgnoreCase(palavraChave);
+		} else {
+			seriesEntity = serieRepo.findAll();
+		}
+
 		if (!seriesEntity.isEmpty()) {
 			List<String> retorno = new ArrayList<String>();
 			for (SerieEntity serie : seriesEntity) {

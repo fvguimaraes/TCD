@@ -1,16 +1,17 @@
 package br.com.fiap69aoj.usuario.service;
 
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
+import br.com.fiap69aoj.usuario.dao.entity.ConteudoEntity;
+import br.com.fiap69aoj.usuario.dao.entity.UsuarioEntity;
+import br.com.fiap69aoj.usuario.dao.repository.ConteudoRepository;
+import br.com.fiap69aoj.usuario.dao.repository.UsuarioRepository;
+import br.com.fiap69aoj.usuario.exception.UsuarioNaoEncontradoExcption;
+import br.com.fiap69aoj.usuario.model.Conteudo;
+import br.com.fiap69aoj.usuario.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.fiap69aoj.usuario.dao.entity.UsuarioEntity;
-import br.com.fiap69aoj.usuario.dao.repository.UsuarioRepository;
-import br.com.fiap69aoj.usuario.exception.UsuarioNaoEncontradoExcption;
-import br.com.fiap69aoj.usuario.model.Usuario;
+import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -18,7 +19,9 @@ public class UsuarioService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	
+	@Autowired
+	private ConteudoRepository conteudoRepository;
+
 	public Usuario obterDadosUsuarioPorId(String idAcesso) {
 		Optional<UsuarioEntity> usuario = usuarioRepository.findByIdAcesso(idAcesso);
 		if(usuario.isPresent()) {
@@ -46,7 +49,6 @@ public class UsuarioService {
 		entity.setIdAcesso(usuario.getIdAcesso());
 		usuarioRepository.save(entity);			
 	}
-
 		
 	private Usuario buildUsuarioModelo(UsuarioEntity usuarioEntity) {
 		return new Usuario.BuildUsuario()
@@ -56,4 +58,9 @@ public class UsuarioService {
 				.build();
 	}
 
+	public void adicionaConteudoNaLista(Conteudo conteudo) {
+		ConteudoEntity entity = new ConteudoEntity();
+		entity.setId(conteudo.getId());
+		this.conteudoRepository.save(entity);
+	}
 }

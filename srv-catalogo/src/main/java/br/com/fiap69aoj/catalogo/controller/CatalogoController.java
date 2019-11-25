@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,26 +45,28 @@ public class CatalogoController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
-	@ApiOperation(value = "Obtem filmes por determindo genero", notes = "Obter filmes por determinado genero", response = String.class)
+	@ApiOperation(value = "Obtem filmes por determindo genero e/ou palavra-chave", notes = "Obter filmes por determinado genero e/ou palavra-chave", response = String.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Filmes listados com sucesso"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
 		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 		    @ApiResponse(code = 404, message = "Nenhum filme encontrado") })
-	@GetMapping("/filmes/{genero}")
-	public ResponseEntity<List<String>> listarFilmesPorGenero(@PathVariable String genero) {
-		return ResponseEntity.ok(catalogoService.obterFilmePorGenero(genero));
+	@GetMapping("/filmes/")
+	public ResponseEntity<List<String>> listarFilmesPorGenero(@RequestParam(required = false) String genero,
+			@RequestParam(required = false) String palavraChave) {
+		return ResponseEntity.ok(catalogoService.obterFilmePorGeneroOuChave(genero, palavraChave));
 	}
 	
-	@ApiOperation(value = "Obtem serie por determindo genero", notes = "Obter serie por determinado genero", response = String.class)
+	@ApiOperation(value = "Obtem serie por determindo genero e/ou palavra-chave", notes = "Obter serie por determinado genero e/ou palavra-chave", response = String.class)
 	@ApiResponses(value = { 
 			@ApiResponse(code = 200, message = "Series listadas com sucesso"),
 			@ApiResponse(code = 401, message = "You are not authorized to view the resource"),
 		    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
 		    @ApiResponse(code = 404, message = "Nenhuma serie encontrado") })
-	@GetMapping("/series/{genero}")
-	public ResponseEntity<List<String>> listarSeriesPorGenero(@PathVariable String genero) {
-		return ResponseEntity.ok(catalogoService.obterSeriePorGenero(genero));
+	@GetMapping("/series/")
+	public ResponseEntity<List<String>> listarSeriesPorGenero(@RequestParam(required = false) String genero,
+			@RequestParam(required = false) String palavraChave) {
+		return ResponseEntity.ok(catalogoService.obterSeriePorGeneroOuChave(genero, palavraChave));
 	}
 	
 	@ApiOperation(value = "Obtem detalhe de um filme", notes = "Obtem detalhe de um filme", response = Filme.class)

@@ -1,5 +1,6 @@
 package br.com.fiap69aoj.usuario.controller;
 
+import br.com.fiap69aoj.usuario.model.Conteudo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,11 +60,23 @@ public class UsuarioController {
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Atualiza um usuário", notes = "Atualiza um usuário" )
 	@ApiResponses({
-        @ApiResponse(code = 200, message = "Atualização com sucesso de um usuário.")
-    })
+			@ApiResponse(code = 200, message = "Atualização com sucesso de um usuário.")
+	})
 	@PutMapping("/usuarios/")
 	public ResponseEntity<HttpStatus> atualizarUsuario(@RequestBody Usuario usuario) {
 		service.atualizarUsuario(usuario);
 		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+
+
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Atualiza um usuário", notes = "Atualiza um usuário" )
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Atualização com sucesso de um usuário.")
+	})
+	@PutMapping("/usuarios/minha-lista")
+	public ResponseEntity atualizarMinhaLista(@RequestBody Conteudo conteudo) {
+		service.adicionaConteudoNaLista(conteudo);
+		return ResponseEntity.ok().build();
 	}
 }
